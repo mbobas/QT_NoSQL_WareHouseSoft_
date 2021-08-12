@@ -53,7 +53,7 @@
        </rect>
       </property>
       <property name="placeholderText">
-       <string>Wyszukaj</string>
+       <string>Wyszukaj kontrahenta</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_dodajKontrahenta">
@@ -267,14 +267,494 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="tab_magazyn">
      <attribute name="title">
       <string>Magazyn</string>
      </attribute>
+     <widget class="QTableView" name="tableView_magazyn">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>990</width>
+        <height>400</height>
+       </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_magazyn_wyszukajtowar">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>400</y>
+        <width>990</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>Wyszukaj towar</string>
+      </property>
+     </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="tab_sprzedaz">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Sprzedaż</string>
+     </attribute>
+     <widget class="QTableView" name="tableView_sprzedaz">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>990</width>
+        <height>400</height>
+       </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_sprzedaz_wyszukajtowar">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>400</y>
+        <width>990</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>Wyszukaj sprzedaz po nazwie kontrahenta lub dacie</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzedaz">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>420</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Dodaj Sprzedaż</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>470</y>
+        <width>151</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_sprzedaz_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>500</y>
+        <width>151</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_sprzedaz_3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>530</y>
+        <width>151</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_sprzedaz_cena1">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>470</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzedaz_produkt">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>440</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Produkt (id, nazwa, cena)</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzedaz_ilosc">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>440</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ilosc</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_sprzedaz_cena_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>500</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_sprzedaz_cena1_3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>530</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_suma_jednostkowa">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>440</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Suma netto</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_sum1">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>470</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_sum2">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>500</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_sum3">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>530</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_suma_jednostkowa_brutto">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>440</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Suma brutto</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_sumb1">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>470</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_sumb2">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>500</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_sumb3">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>530</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzedaz_razemnetto">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>530</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Razem netto</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzedaz_razembrutto">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>530</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Razem brutto</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_suma_razemnetto">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>550</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_suma_razembrutto">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>550</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_sprzedaz_kontrahent">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>600</y>
+        <width>321</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_sprzed_1">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>470</y>
+        <width>16</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_sprzed_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>500</y>
+        <width>16</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_sprzed_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>530</y>
+        <width>16</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_sprzedaz">
+      <property name="geometry">
+       <rect>
+        <x>730</x>
+        <y>700</y>
+        <width>141</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Wystaw Pragon i Fakturę</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzedaz_kontrahent">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>570</y>
+        <width>181</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Kontrahent (id, nazwa, NIP/PESEL</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sprzed_komunikat">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>660</y>
+        <width>511</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_faktury">
+     <attribute name="title">
+      <string>Faktury</string>
+     </attribute>
+     <widget class="QTableView" name="tableView_faktury">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>990</width>
+        <height>400</height>
+       </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_faktury_wyszukaj">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>400</y>
+        <width>990</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>Wyszukaj fakturę po NAZWIE / NIP/ PESEL</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_faktury">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>470</y>
+        <width>411</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Faktury wystawiane są automatycznie przy zatwierdzeniu sprzedazy</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_prod_kat">
+     <attribute name="title">
+      <string>Produkty i Kategorie</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Dostawy</string>
      </attribute>
     </widget>
    </widget>
