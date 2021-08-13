@@ -999,13 +999,13 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>400</y>
+        <y>350</y>
         <width>1001</width>
         <height>22</height>
        </rect>
       </property>
       <property name="placeholderText">
-       <string>Wyszukaj dostawę po nazwie kontrahenta lub dacie</string>
+       <string>Wyszukaj dostawę dacie dostawy</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_dostawa">
@@ -1409,8 +1409,21 @@
         <x>0</x>
         <y>0</y>
         <width>990</width>
-        <height>400</height>
+        <height>351</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_dostawa_wyszukajtowar_kontrahent">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>370</y>
+        <width>1001</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>Wyszukaj dostawę po kontrahencie</string>
       </property>
      </widget>
     </widget>

@@ -697,63 +697,46 @@ QString MainWindow::query(QString query){
             t +=zapytanie.value(i).toString();
     }
 
+    qDebug() << t;
 }
+    return t;
 }
+
+QString MainWindow::queryWithComa(QString query){
+    QSqlQuery zapytanie;
+    //query z pola tekstowego
+    QString tekst;
+    tekst = query;
+    QString t = "";
+
+    bool sukces = zapytanie.exec(query);
+    qDebug() << sukces;
+
+    int ile_pol = zapytanie.record().count();
+
+    //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+    while(zapytanie.next())
+    {
+        for (int i=0; i<ile_pol; i++){
+            t +=zapytanie.value(i).toString() + ",";
+    }
+
+    qDebug() << t;
+}
+    return t;
+}
+
 void MainWindow::on_lineEdit_dostawa_wyszukajtowar_textChanged(const QString &arg1)
 {
-//    QString wyszukajDostawy;
-//    wyszukajDostawy="nazwa LIKE '%" + arg1 +"%'";
-
-//    QSqlRelationalTableModel *model = new QSqlRelationalTableModel;
-//    model->setTable("dostawa");
-//    //ktora kolumne chce polaczyc
-//    model->setRelation(2, QSqlRelation("kontrahent", "id_kontrahenta", "nazwa"));
-//    model->setFilter(wyszukajDostawy);
-//    model->select();
-
-//    ui->tableView_dostawy->setModel(model);
-//    ui->tableView_dostawy->show();
-//    ui->tableWidget->clear();
-
-
-
-//zapytanie zwraca boola
-//QSqlQuery zapytanie;
-//    //query z pola tekstowego
-//    QString tekst;
-//    tekst = arg1;
-
-//    bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '%"+tekst+"%';");
-//    qDebug() << sukces;
-
-//    int ile_pol = zapytanie.record().count();
-//    ui->tableWidget_dostawa->setColumnCount(ile_pol);
-//    ui->tableWidget_dostawa->setRowCount(0);
-
-//    //pobieramy ilosc pol
-//    int wiersz =0;
-//    //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
-//    while(zapytanie.next())
-//    {
-//        ui->tableWidget_dostawa->insertRow(wiersz);
-//        for (int i=0; i<ile_pol; i++){
-//            ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()+" "));
-//        }
-
-//    wiersz++;
-
-//    }
         QSqlQuery zapytanie;
         //query z pola tekstowego
-        QString tekst;
-        tekst = arg1;
-
-        bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '%"+tekst+"%';");
+        bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '%"+arg1+"%';");
         qDebug() << sukces;
 
         int ile_pol = zapytanie.record().count();
         ui->tableWidget_dostawa->setColumnCount(ile_pol);
         ui->tableWidget_dostawa->setRowCount(0);
+        ui->tableWidget_dostawa->setHorizontalHeaderLabels(QStringList() << "No." << "Kontrahent" << "Produkt1"<< "Ilość1"<< "Produkt2"<< "Ilość2"<< "Produkt3"<< "Ilość3"<<"Data dostawy");
 
         //pobieramy ilosc pol
         int wiersz =0;
@@ -762,14 +745,121 @@ void MainWindow::on_lineEdit_dostawa_wyszukajtowar_textChanged(const QString &ar
         {
             ui->tableWidget_dostawa->insertRow(wiersz);
             for (int i=0; i<1; i++){
-                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()+" "));
+                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()));
             }
             for (int i=1; i<2; i++){
-                //query("SELECT nazwa FROM KONTRAHENT WHERE id_kontrahenta=7;");
-                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()+" "));
+                QString nazwa_kontrahenta_temp = query("SELECT nazwa FROM KONTRAHENT WHERE id_kontrahenta="+zapytanie.value(i).toString());
+                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(nazwa_kontrahenta_temp));
+            }
+            for (int i=2; i<=6; i+=2){
+                QString nazwa_produktu_temp = query("SELECT nazwa FROM PRODUKTY WHERE produkt_id="+zapytanie.value(i).toString());
+                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(nazwa_produktu_temp));
+            }
+            for (int i=3; i<=7; i+=2){
+                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()));
+            }
+            for (int i=8; i<9; i++){
+                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()));
             }
 
         wiersz++;
 
         }
+        qDebug() << query("SELECT nazwa FROM KONTRAHENT WHERE id_kontrahenta=7;");
 }
+
+void MainWindow::on_lineEdit_dostawa_wyszukajtowar_kontrahent_textChanged(const QString &arg1)
+{
+          QString wybrany_kontrahent_id;
+
+          wybrany_kontrahent_id = queryWithComa("SELECT id_kontrahenta FROM kontrahent WHERE nazwa LIKE '%"+arg1+"%';");
+          QString dlugoscTablicyString;
+          int dlugosc_tablicyINT;
+
+          for (int i=0; i<wybrany_kontrahent_id.length(); i++){
+              if(wybrany_kontrahent_id[i] != ",") {
+                  dlugoscTablicyString+=wybrany_kontrahent_id[i];
+                  qDebug() << "dlugoscTablicyString["<<i<<"]="<<dlugoscTablicyString;
+              }
+            }
+          dlugosc_tablicyINT = dlugoscTablicyString.length();
+
+          int wybrany_kontrahent_nazwa[dlugosc_tablicyINT];
+
+          qDebug() << wybrany_kontrahent_id;
+          QString t;
+          int j=0;
+          for (int i=0; i<wybrany_kontrahent_id.length(); i++){
+              if(wybrany_kontrahent_id[i] != ",") {
+                  t+=wybrany_kontrahent_id[i];
+                  qDebug() << "t["<<i<<"]="<<t;
+              }
+              if (wybrany_kontrahent_id[i] == ","){
+
+                  wybrany_kontrahent_nazwa[j]=t.toInt();
+                  t="";
+                  qDebug() << "wybrany_kontrahent_nazwa["<<j<<"]="<<wybrany_kontrahent_nazwa[j];
+                  j++;
+              }
+
+          }
+
+
+          for (int i=0; i<dlugosc_tablicyINT-2; i++){
+              qDebug() << "tab" << wybrany_kontrahent_nazwa[i];
+          }
+          QSqlQuery zapytanie;
+          bool sukces;
+          //query z pola tekstowego
+          if (dlugosc_tablicyINT-2==1 ){
+               sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[0])+";");
+          }
+          if (dlugosc_tablicyINT-2==2){
+               sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[0])+" OR id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[1])+";");
+          }
+          if (dlugosc_tablicyINT-2==3){
+               sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[0])+" OR id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[1])+" OR id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[2])+";");
+          }
+          if (dlugosc_tablicyINT-2>3){
+               sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[0])+" OR id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[1])+" OR id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[2])+" OR id_kontrahenta="+QString::number(wybrany_kontrahent_nazwa[3])+";");
+          }
+
+          qDebug() << sukces;
+
+          int ile_pol = zapytanie.record().count();
+          ui->tableWidget_dostawa->setColumnCount(ile_pol);
+          ui->tableWidget_dostawa->setRowCount(0);
+          ui->tableWidget_dostawa->setHorizontalHeaderLabels(QStringList() << "No." << "Kontrahent" << "Produkt1"<< "Ilość1"<< "Produkt2"<< "Ilość2"<< "Produkt3"<< "Ilość3"<<"Data dostawy");
+
+          //pobieramy ilosc pol
+          int wiersz =0;
+          //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+          while(zapytanie.next())
+          {
+              ui->tableWidget_dostawa->insertRow(wiersz);
+              for (int i=0; i<1; i++){
+                  ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()));
+              }
+              for (int i=1; i<2; i++){
+                  QString nazwa_kontrahenta_temp = query("SELECT nazwa FROM KONTRAHENT WHERE id_kontrahenta="+zapytanie.value(i).toString());
+                  ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(nazwa_kontrahenta_temp));
+              }
+              for (int i=2; i<=6; i+=2){
+                  QString nazwa_produktu_temp = query("SELECT nazwa FROM PRODUKTY WHERE produkt_id="+zapytanie.value(i).toString());
+                  ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(nazwa_produktu_temp));
+              }
+              for (int i=3; i<=7; i+=2){
+                  ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()));
+              }
+              for (int i=8; i<9; i++){
+                  ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()));
+              }
+
+          wiersz++;
+
+          }
+          if (arg1 == "") {
+              on_lineEdit_dostawa_wyszukajtowar_textChanged("");
+          }
+}
+

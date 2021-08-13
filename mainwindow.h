@@ -91,6 +91,9 @@ private slots:
     void on_lineEdit_dostawa_wyszukajtowar_textChanged(const QString &arg1);
 
     QString query(QString query);
+    QString queryWithComa(QString query);
+
+    void on_lineEdit_dostawa_wyszukajtowar_kontrahent_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
