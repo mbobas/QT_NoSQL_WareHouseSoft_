@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
     }else {
         qDebug()<<"Polaczono z hurtownia.db";
     }
+
+
 //kontrahenci - konstruktor
     QSqlTableModel *model = new QSqlTableModel;
     model->setTable("kontrahent");
@@ -87,7 +89,16 @@ MainWindow::MainWindow(QWidget *parent)
             }
              ui->comboBox_sprzedaz_kontrahent->addItem(t);
         }
+//produkty konstruktor
+//const QString &arg = "";
+on_lineEdit_produkt_textChanged("");
+on_lineEdit_kategorie_textChanged("");
+PK_combobox_kategoria_konstruktor();
+on_lineEdit_dostawa_wyszukajtowar_textChanged("");
+
 }
+
+
 
 
 MainWindow::~MainWindow()
@@ -134,6 +145,35 @@ void MainWindow::sprzedaz_combobox_produkt_konstruktor2(){
              ui->comboBox_sprzedaz_2->addItem(t);
         }
 }
+void MainWindow::PK_combobox_kategoria_konstruktor(){
+
+        ui->lineEdit_PK_produkt_id->setVisible(0);
+        ui->lineEdit_PK_nazwa->setVisible(0);
+        ui->lineEdit_PK_cena->setVisible(0);
+        ui->lineEdit_PK_waga->setVisible(0);
+        ui->comboBox_PK_kategoria->setVisible(0);
+
+        //zapytanie zwraca boola
+        QSqlQuery zapytanie;
+        //query z pola tekstowego
+        QString tekst;
+        tekst = "SELECT id_kategoria, nazwa FROM kategoria;";
+        bool sukces = zapytanie.exec(tekst);
+        qDebug() << sukces;
+        //pobieramy ilosc pol
+        int ile_pol = zapytanie.record().count();
+        //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+        while(zapytanie.next())
+        {
+            QString t = "";
+            for (int i=0; i<ile_pol; i++){
+                t +=zapytanie.value(i).toString()+" | ";
+            }
+             ui->comboBox_PK_kategoria->addItem(t);
+        }
+}
+
+
 void MainWindow::sprzedaz_combobox_produkt_konstruktor3(){
         //zapytanie zwraca boola
         QSqlQuery zapytanie;
@@ -315,6 +355,7 @@ void MainWindow::on_comboBox_activated(const QString &arg1)
     qDebug() << produkt1;
     qDebug() << cena_produktu_sprzedaz(produkt1);
     cena1 = cena_produktu_sprzedaz(produkt1);
+    odswiezCeneBruttoINetto();
 }
 
 void MainWindow::on_comboBox_sprzedaz_2_activated(const QString &arg1)
@@ -326,6 +367,7 @@ void MainWindow::on_comboBox_sprzedaz_2_activated(const QString &arg1)
     produkt2=wybrany_produkt.remove(wybrany_produkt.indexOf(" "), wybrany_produkt.length());
     qDebug() << produkt2;
     cena2 = cena_produktu_sprzedaz(produkt2);
+    odswiezCeneBruttoINetto();
 }
 
 void MainWindow::on_comboBox_sprzedaz_3_activated(const QString &arg1)
@@ -337,6 +379,7 @@ void MainWindow::on_comboBox_sprzedaz_3_activated(const QString &arg1)
     produkt3=wybrany_produkt.remove(wybrany_produkt.indexOf(" "), wybrany_produkt.length());
     qDebug() << produkt3;
     cena3 = cena_produktu_sprzedaz(produkt3);
+    odswiezCeneBruttoINetto();
 }
 
 void MainWindow::on_comboBox_sprzedaz_kontrahent_activated(const QString &arg1)
@@ -496,4 +539,237 @@ void MainWindow::on_lineEdit_faktury_wyszukaj_textChanged(const QString &arg1)
     model5->select();
     ui->tableView_faktury->setModel(model5);
     ui->tableView_faktury->show();
+}
+
+void MainWindow::on_lineEdit_produkt_textChanged(const QString &arg1)
+{
+    QString wyszukajProdukt;
+    wyszukajProdukt="nazwa LIKE '%" + arg1 +"%'";
+
+    QSqlTableModel *model6 = new QSqlTableModel;
+    model6->setTable("produkty");
+    model6->setFilter(wyszukajProdukt);
+    model6->select();
+
+    ui->tableView_produkty->setModel(model6);
+    ui->tableView_produkty->show();
+}
+
+void MainWindow::on_lineEdit_kategorie_textChanged(const QString &arg1)
+{
+    QString wyszukajProdukt;
+    wyszukajProdukt="nazwa LIKE '%" + arg1 +"%'";
+
+    QSqlTableModel *model6 = new QSqlTableModel;
+    model6->setTable("kategoria");
+    model6->setFilter(wyszukajProdukt);
+    model6->select();
+
+    ui->tableView_kategorie->setModel(model6);
+    ui->tableView_kategorie->show();
+}
+
+void MainWindow::on_comboBox_PK_kategoria_activated(const QString &arg1)
+{
+    QString wybrana_kategoria;
+    wybrana_kategoria=arg1;
+    qDebug() << wybrana_kategoria;
+    kategoria=wybrana_kategoria.remove(wybrana_kategoria.indexOf(" "), wybrana_kategoria.length());
+    qDebug() << kategoria;
+}
+
+void MainWindow::clearFieldsPK(){
+    ui->lineEdit_PK_produkt_id->clear();
+    ui->lineEdit_PK_nazwa->clear();
+    ui->lineEdit_PK_cena->clear();
+    ui->lineEdit_PK_waga->clear();
+}
+void MainWindow::on_radioButton_dodajProdukt_clicked(bool checked)
+{
+    if (checked) {
+        pk_check=1;
+        ui->lineEdit_PK_produkt_id->setVisible(0);
+        ui->lineEdit_PK_nazwa->setVisible(1);
+        ui->lineEdit_PK_cena->setVisible(1);
+        ui->lineEdit_PK_waga->setVisible(1);
+        ui->comboBox_PK_kategoria->setVisible(1);
+        clearFieldsPK();
+    }
+}
+
+void MainWindow::on_radioButton_dodajKategori_clicked(bool checked)
+{
+    if (checked) {
+    pk_check=2;
+    ui->lineEdit_PK_produkt_id->setVisible(0);
+    ui->lineEdit_PK_nazwa->setVisible(1);
+    ui->lineEdit_PK_cena->setVisible(0);
+    ui->lineEdit_PK_waga->setVisible(0);
+    ui->comboBox_PK_kategoria->setVisible(0);
+    clearFieldsPK();
+    }
+}
+
+
+void MainWindow::on_radioButton_usunProdukt_clicked(bool checked)
+{
+    if (checked) {
+    pk_check=3;
+    ui->lineEdit_PK_produkt_id->setVisible(1);
+    ui->lineEdit_PK_nazwa->setVisible(1);
+    ui->lineEdit_PK_cena->setVisible(0);
+    ui->lineEdit_PK_waga->setVisible(0);
+    ui->comboBox_PK_kategoria->setVisible(0);
+    clearFieldsPK();
+    }
+}
+
+void MainWindow::on_radioButton_usunKategori_clicked(bool checked)
+{
+    if (checked) {
+    pk_check=4;
+    ui->lineEdit_PK_produkt_id->setVisible(0);
+    ui->lineEdit_PK_nazwa->setVisible(0);
+    ui->lineEdit_PK_cena->setVisible(0);
+    ui->lineEdit_PK_waga->setVisible(0);
+    ui->comboBox_PK_kategoria->setVisible(1);
+    clearFieldsPK();
+    }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    if (pk_check==1){
+        QString nazwa  = ui->lineEdit_PK_nazwa->text();
+        QString wagaString  = ui->lineEdit_PK_waga->text();
+        QString cenaString  = ui->lineEdit_PK_cena->text();
+
+        double waga = wagaString.toDouble();
+        double cena = cenaString.toDouble();
+
+        //dodaj produkt
+        QSqlQuery zapytanie;
+        zapytanie.prepare("INSERT INTO produkty(nazwa, waga, cena, id_kategoria) VALUES (:nazwa, :waga, :cena, :id_kategoria);");
+        zapytanie.bindValue(":nazwa", nazwa);
+        zapytanie.bindValue(":waga", waga);
+        zapytanie.bindValue(":cena", cena);
+        zapytanie.bindValue(":id_kategoria", kategoria);
+        bool sukces = zapytanie.exec();
+        qDebug() << sukces;
+        if (sukces) {
+            ui->label_PK->setText("Dodano prdukt");
+        }else {
+            ui->label_PK->setText("Błąd. Nie dodano prduktu.");
+        }
+    }
+    if (pk_check==2){
+        QString nazwa  = ui->lineEdit_PK_nazwa->text();
+        //dodaj kategorię
+        QSqlQuery zapytanie;
+        zapytanie.prepare("INSERT INTO kategoria(nazwa) VALUES (:nazwa);");
+        zapytanie.bindValue(":nazwa", nazwa);
+        bool sukces = zapytanie.exec();
+        qDebug() << sukces;
+        if (sukces) {
+            ui->label_PK->setText("Dodano kategorię");
+        }else {
+            ui->label_PK->setText("Błąd. Nie dodano kategorii.");
+        }
+    }
+
+}
+QString MainWindow::query(QString query){
+    QSqlQuery zapytanie;
+    //query z pola tekstowego
+    QString tekst;
+    tekst = query;
+    QString t = "";
+
+    bool sukces = zapytanie.exec(query);
+    qDebug() << sukces;
+
+    int ile_pol = zapytanie.record().count();
+
+    //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+    while(zapytanie.next())
+    {
+        for (int i=0; i<ile_pol; i++){
+            t +=zapytanie.value(i).toString();
+    }
+
+}
+}
+void MainWindow::on_lineEdit_dostawa_wyszukajtowar_textChanged(const QString &arg1)
+{
+//    QString wyszukajDostawy;
+//    wyszukajDostawy="nazwa LIKE '%" + arg1 +"%'";
+
+//    QSqlRelationalTableModel *model = new QSqlRelationalTableModel;
+//    model->setTable("dostawa");
+//    //ktora kolumne chce polaczyc
+//    model->setRelation(2, QSqlRelation("kontrahent", "id_kontrahenta", "nazwa"));
+//    model->setFilter(wyszukajDostawy);
+//    model->select();
+
+//    ui->tableView_dostawy->setModel(model);
+//    ui->tableView_dostawy->show();
+//    ui->tableWidget->clear();
+
+
+
+//zapytanie zwraca boola
+//QSqlQuery zapytanie;
+//    //query z pola tekstowego
+//    QString tekst;
+//    tekst = arg1;
+
+//    bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '%"+tekst+"%';");
+//    qDebug() << sukces;
+
+//    int ile_pol = zapytanie.record().count();
+//    ui->tableWidget_dostawa->setColumnCount(ile_pol);
+//    ui->tableWidget_dostawa->setRowCount(0);
+
+//    //pobieramy ilosc pol
+//    int wiersz =0;
+//    //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+//    while(zapytanie.next())
+//    {
+//        ui->tableWidget_dostawa->insertRow(wiersz);
+//        for (int i=0; i<ile_pol; i++){
+//            ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()+" "));
+//        }
+
+//    wiersz++;
+
+//    }
+        QSqlQuery zapytanie;
+        //query z pola tekstowego
+        QString tekst;
+        tekst = arg1;
+
+        bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '%"+tekst+"%';");
+        qDebug() << sukces;
+
+        int ile_pol = zapytanie.record().count();
+        ui->tableWidget_dostawa->setColumnCount(ile_pol);
+        ui->tableWidget_dostawa->setRowCount(0);
+
+        //pobieramy ilosc pol
+        int wiersz =0;
+        //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+        while(zapytanie.next())
+        {
+            ui->tableWidget_dostawa->insertRow(wiersz);
+            for (int i=0; i<1; i++){
+                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()+" "));
+            }
+            for (int i=1; i<2; i++){
+                //query("SELECT nazwa FROM KONTRAHENT WHERE id_kontrahenta=7;");
+                ui->tableWidget_dostawa->setItem(wiersz,i, new QTableWidgetItem(zapytanie.value(i).toString()+" "));
+            }
+
+        wiersz++;
+
+        }
 }

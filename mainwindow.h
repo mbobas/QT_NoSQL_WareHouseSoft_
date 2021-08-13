@@ -17,9 +17,9 @@ public:
     ~MainWindow();
 private:
     const double VAT = 1.23;
-    int counterSprzedaz = 0,  ilosc1=0, ilosc2=0, ilosc3=0;
+    int counterSprzedaz = 0,  ilosc1=0, ilosc2=0, ilosc3=0, pk_check=0;
     QString produkt1, produkt2, produkt3,  id_kontrahenta;
-    QString data_sprzedazy, ilosc_pozycji;
+    QString data_sprzedazy, ilosc_pozycji, kategoria;
     double cena1=0, cena2=0, cena3=0, sumaN1=0, sumaN2=0, sumaN3=0, sumaB1=0, sumaB2=0, sumaB3=0, razemN=0, razemB=0;
 
 private slots:
@@ -67,6 +67,30 @@ private slots:
     void on_lineEdit_sprzedaz_wyszukajtowar_textChanged(const QString &arg1);
 
     void on_lineEdit_faktury_wyszukaj_textChanged(const QString &arg1);
+
+    void on_lineEdit_produkt_textChanged(const QString &arg1);
+
+    void on_lineEdit_kategorie_textChanged(const QString &arg1);
+
+    void on_comboBox_PK_kategoria_activated(const QString &arg1);
+
+    void PK_combobox_kategoria_konstruktor();
+
+    void on_radioButton_dodajProdukt_clicked(bool checked);
+
+    void on_radioButton_dodajKategori_clicked(bool checked);
+
+    void on_radioButton_usunProdukt_clicked(bool checked);
+
+    void on_radioButton_usunKategori_clicked(bool checked);
+
+    void on_pushButton_clicked();
+
+    void clearFieldsPK();
+
+    void on_lineEdit_dostawa_wyszukajtowar_textChanged(const QString &arg1);
+
+    QString query(QString query);
 
 private:
     Ui::MainWindow *ui;
