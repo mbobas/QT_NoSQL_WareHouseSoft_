@@ -27,7 +27,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Magazyn&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab_kontrahenci">
      <attribute name="title">
@@ -923,6 +923,9 @@
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton_usunProdukt">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>310</x>
@@ -936,6 +939,9 @@
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton_usunKategori">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>420</x>
