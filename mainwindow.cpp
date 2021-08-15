@@ -2,6 +2,9 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QString>
+#include <QTextStream>
+#include <QTime>
+#include <QDate>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -44,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_magazyn->show();
 
 //sprzedaz konstruktor
+
     QSqlRelationalTableModel *model3 = new QSqlRelationalTableModel;
     model3->setTable("sprzedaz");
     //ktora kolumne chce polaczyc
@@ -66,36 +70,27 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView_faktury->setModel(model5);
     ui->tableView_faktury->show();
 
+    dostawa_combobox_produkt_konstruktor();
+    dostawa_combobox_produkt_konstruktor2();
+    dostawa_combobox_produkt_konstruktor3();
+
     sprzedaz_combobox_produkt_konstruktor();
     sprzedaz_combobox_produkt_konstruktor2();
     sprzedaz_combobox_produkt_konstruktor3();
 
-//sprzedaz - combobox - kontrahent - konstruktor
-        //zapytanie zwraca boola
-        QSqlQuery zapytanieKontrahent;
-        //query z pola tekstowego
-        QString tekstKontrahent;
-        tekstKontrahent = "SELECT id_kontrahenta, nazwa, nip FROM kontrahent;";
-        bool sukces1 = zapytanieKontrahent.exec(tekstKontrahent);
-        qDebug() << sukces1;
-        //pobieramy ilosc pol
-        int ile_pol1 = zapytanieKontrahent.record().count();
-        //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
-        while(zapytanieKontrahent.next())
-        {
-            QString t = "";
-            for (int i=0; i<ile_pol1; i++){
-                t +=zapytanieKontrahent.value(i).toString()+" | ";
-            }
-             ui->comboBox_sprzedaz_kontrahent->addItem(t);
-        }
-//produkty konstruktor
-//const QString &arg = "";
-on_lineEdit_produkt_textChanged("");
-on_lineEdit_kategorie_textChanged("");
-PK_combobox_kategoria_konstruktor();
-on_lineEdit_dostawa_wyszukajtowar_textChanged("");
+    on_lineEdit_produkt_textChanged("");
+    on_lineEdit_kategorie_textChanged("");
+    PK_combobox_kategoria_konstruktor();
+    on_lineEdit_dostawa_wyszukajtowar_textChanged("");
+    sprzedaz_kontrahent_combobox_konstruktor();
+    dostawa_kontrahent_combobox_konstruktor();
 
+//    QTextStream out(stdout);
+    QDate cd = QDate::currentDate();
+//    out << "Current date is: " << cd.toString();
+//    out << "Today is " << cd.toString(Qt::ISODate);
+    data_dostawy=cd.toString(Qt::ISODate);
+    data_sprzedazy=data_dostawy;
 }
 
 
@@ -104,6 +99,106 @@ on_lineEdit_dostawa_wyszukajtowar_textChanged("");
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::sprzedaz_kontrahent_combobox_konstruktor(){
+    QSqlQuery zapytanieKontrahent;
+    //query z pola tekstowego
+    QString tekstKontrahent;
+    tekstKontrahent = "SELECT id_kontrahenta, nazwa, nip FROM kontrahent;";
+    bool sukces1 = zapytanieKontrahent.exec(tekstKontrahent);
+    qDebug() << sukces1;
+    //pobieramy ilosc pol
+    int ile_pol1 = zapytanieKontrahent.record().count();
+    //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+    while(zapytanieKontrahent.next())
+    {
+        QString t = "";
+        for (int i=0; i<ile_pol1; i++){
+            t +=zapytanieKontrahent.value(i).toString()+" | ";
+        }
+         ui->comboBox_sprzedaz_kontrahent->addItem(t);
+    }
+}
+void MainWindow::dostawa_kontrahent_combobox_konstruktor(){
+    QSqlQuery zapytanieKontrahent;
+    //query z pola tekstowego
+    QString tekstKontrahent;
+    tekstKontrahent = "SELECT id_kontrahenta, nazwa, nip FROM kontrahent;";
+    bool sukces1 = zapytanieKontrahent.exec(tekstKontrahent);
+    qDebug() << sukces1;
+    //pobieramy ilosc pol
+    int ile_pol1 = zapytanieKontrahent.record().count();
+    //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+    while(zapytanieKontrahent.next())
+    {
+        QString t = "";
+        for (int i=0; i<ile_pol1; i++){
+            t +=zapytanieKontrahent.value(i).toString()+" | ";
+        }
+         ui->comboBox_dostawa_kontrahent->addItem(t);
+    }
+}
+
+void MainWindow::dostawa_combobox_produkt_konstruktor(){
+        //zapytanie zwraca boola
+        QSqlQuery zapytanie;
+        //query z pola tekstowego
+        QString tekst;
+        tekst = "SELECT produkt_id, nazwa, cena FROM produkty;";
+        bool sukces = zapytanie.exec(tekst);
+        qDebug() << sukces;
+        //pobieramy ilosc pol
+        int ile_pol = zapytanie.record().count();
+        //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+        while(zapytanie.next())
+        {
+            QString t = "";
+            for (int i=0; i<ile_pol; i++){
+                t +=zapytanie.value(i).toString()+" | ";
+            }
+             ui->comboBox_dostawa1->addItem(t);
+        }
+}
+void MainWindow::dostawa_combobox_produkt_konstruktor2(){
+        //zapytanie zwraca boola
+        QSqlQuery zapytanie;
+        //query z pola tekstowego
+        QString tekst;
+        tekst = "SELECT produkt_id, nazwa, cena FROM produkty;";
+        bool sukces = zapytanie.exec(tekst);
+        qDebug() << sukces;
+        //pobieramy ilosc pol
+        int ile_pol = zapytanie.record().count();
+        //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+        while(zapytanie.next())
+        {
+            QString t = "";
+            for (int i=0; i<ile_pol; i++){
+                t +=zapytanie.value(i).toString()+" | ";
+            }
+             ui->comboBox_dostawa2->addItem(t);
+        }
+}
+void MainWindow::dostawa_combobox_produkt_konstruktor3(){
+        //zapytanie zwraca boola
+        QSqlQuery zapytanie;
+        //query z pola tekstowego
+        QString tekst;
+        tekst = "SELECT produkt_id, nazwa, cena FROM produkty;";
+        bool sukces = zapytanie.exec(tekst);
+        qDebug() << sukces;
+        //pobieramy ilosc pol
+        int ile_pol = zapytanie.record().count();
+        //iterujemy po wszytkich rekordach zwroconych przez zpaytanie
+        while(zapytanie.next())
+        {
+            QString t = "";
+            for (int i=0; i<ile_pol; i++){
+                t +=zapytanie.value(i).toString()+" | ";
+            }
+             ui->comboBox_dostawa3->addItem(t);
+        }
 }
 void MainWindow::sprzedaz_combobox_produkt_konstruktor(){
         //zapytanie zwraca boola
@@ -395,8 +490,27 @@ void MainWindow::on_comboBox_sprzedaz_kontrahent_activated(const QString &arg1)
 void MainWindow::odswiezCeneBruttoINetto() {
     razemN=sumaN1+sumaN2+sumaN3;
     razemB=razemN*VAT;
+    sumaB1=sumaN1*VAT;
+    sumaB2=sumaN2*VAT;
+    sumaB3=sumaN3*VAT;
     ui->label_sprzed_suma_razemnetto->setText(QString::number(razemN));
     ui->label_sprzed_suma_razembrutto->setText(QString::number(razemB));
+    ui->label_sprzed_sum1->setText(QString::number(sumaN1));
+    ui->label_sprzed_sum2->setText(QString::number(sumaN2));
+    ui->label_sprzed_sum3->setText(QString::number(sumaN3));
+    ui->label_sprzed_sumb1->setText(QString::number(sumaB1));
+    ui->label_sprzed_sumb2->setText(QString::number(sumaB2));
+    ui->label_sprzed_sumb3->setText(QString::number(sumaB3));
+
+    ui->label_dostawa_suma_razemnetto_int->setText(QString::number(razemN));
+    ui->label_dostawa_suma_razembrutto_int->setText(QString::number(razemB));
+    ui->label_dostawa_sumN1->setText(QString::number(sumaN1));
+    ui->label_dostawa_sumN2->setText(QString::number(sumaN2));
+    ui->label_dostawa_sumN3->setText(QString::number(sumaN3));
+    ui->label_dostawa_sumB1->setText(QString::number(sumaB1));
+    ui->label_dostawa_sumB2->setText(QString::number(sumaB2));
+    ui->label_dostawa_sumB3->setText(QString::number(sumaB3));
+
 }
 
 void MainWindow::on_lineEdit_sprzedaz_cena1_textChanged(const QString &arg1)
@@ -427,7 +541,8 @@ void MainWindow::on_pushButton_sprzedaz_clicked()
 {
 
     ilosc_pozycji = QString::number(counterSprzedaz);
-    data_sprzedazy ="2021-08-12";
+
+
 
     QString ilosc1_2;
     ilosc1_2 = ui->lineEdit_sprzedaz_cena1->text();
@@ -457,9 +572,8 @@ void MainWindow::on_pushButton_sprzedaz_clicked()
         if (sukces) {
             ui->label_sprzed_komunikat->setText("Sprzedano 1 produkt");
         }
-    } else {
-        ui->label_sprzed_komunikat->setText("Sprawdz lub wybierz jeszcze raz watości");
     }
+
      if(counterSprzedaz == 2 && !id_kontrahenta.isEmpty() && !ilosc1_2.isEmpty() && !produkt1.isEmpty() && !ilosc2_2.isEmpty() && !produkt2.isEmpty() && ilosc1_2 != "0" && ilosc2_2 != "0" ) {
         QSqlQuery zapytanie;
         zapytanie.prepare("INSERT INTO sprzedaz(id_kontrahenta, produkt1_id, ilosc1, produkt2_id, ilosc2, produkt3_id, ilosc3, data_sprzedazy, ilosc_pozycji) VALUES (:id_kontrahenta, :produkt1, :ilosc1_2, :produkt2, :ilosc2_2, 34, 1, :data_sprzedazy, :ilosc_pozycji);");
@@ -477,8 +591,6 @@ void MainWindow::on_pushButton_sprzedaz_clicked()
         if (sukces) {
             ui->label_sprzed_komunikat->setText("Sprzedano 2 produkty");
         }
-    }else {
-         ui->label_sprzed_komunikat->setText("Sprawdz lub wybierz jeszcze raz watości");
     }
 
      if(counterSprzedaz == 3 && !id_kontrahenta.isEmpty() && !ilosc1_2.isEmpty() && !produkt1.isEmpty() && !ilosc2_2.isEmpty() && !produkt2.isEmpty() && !ilosc3_2.isEmpty() && !produkt3.isEmpty() && ilosc1_2 != "0" && ilosc2_2 != "0" && ilosc3_2 != "0") {
@@ -498,9 +610,7 @@ void MainWindow::on_pushButton_sprzedaz_clicked()
         if (sukces) {
             ui->label_sprzed_komunikat->setText("Sprzedano 3 produkty");
         }
-    }else {
-         ui->label_sprzed_komunikat->setText("Sprawdz lub wybierz jeszcze raz watości");
-        }
+    }
 
 }
 
@@ -730,7 +840,8 @@ void MainWindow::on_lineEdit_dostawa_wyszukajtowar_textChanged(const QString &ar
 {
         QSqlQuery zapytanie;
         //query z pola tekstowego
-        bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '%"+arg1+"%';");
+//        bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '%"+arg1+"%';");
+        bool sukces = zapytanie.exec("SELECT * FROM DOSTAWA WHERE data_dostawy LIKE '"+arg1+"%';");
         qDebug() << sukces;
 
         int ile_pol = zapytanie.record().count();
@@ -863,3 +974,254 @@ void MainWindow::on_lineEdit_dostawa_wyszukajtowar_kontrahent_textChanged(const 
           }
 }
 
+
+void MainWindow::on_checkBox_dostawa_1_clicked(bool checked)
+{
+    if (checked) {
+        counterDostawa+=1;
+        ui->comboBox_dostawa1->setEnabled(1);
+    }else {
+        counterDostawa-=1;
+        ui->comboBox_dostawa1->setEnabled(0);
+         ui->lineEdit_dostawa_cena1->setEnabled(0);
+    }
+    qDebug() << counterDostawa;
+}
+
+void MainWindow::on_checkBox_dostawa_2_clicked(bool checked)
+{
+    if (checked) {
+        counterDostawa+=1;
+        ui->comboBox_dostawa2->setEnabled(1);
+    }else {
+        counterDostawa-=1;
+        ui->comboBox_dostawa2->setEnabled(0);
+         ui->lineEdit_dostawa_cena2->setEnabled(0);
+    }
+    qDebug() << counterDostawa;
+}
+
+void MainWindow::on_checkBox_dostawa_3_clicked(bool checked)
+{
+    if (checked) {
+        counterDostawa+=1;
+        ui->comboBox_dostawa3->setEnabled(1);
+    }else {
+        counterDostawa-=1;
+        ui->comboBox_dostawa3->setEnabled(0);
+         ui->lineEdit_dostawa_cena3->setEnabled(0);
+    }
+    qDebug() << counterDostawa;
+}
+
+void MainWindow::on_comboBox_dostawa1_activated(const QString &arg1)
+{
+    ui->lineEdit_dostawa_cena1->setEnabled(1);
+    QString wybrany_produkt;
+    wybrany_produkt=arg1;
+    qDebug() << wybrany_produkt;
+    produkt1=wybrany_produkt.remove(wybrany_produkt.indexOf(" "), wybrany_produkt.length());
+    qDebug() << produkt1;
+    qDebug() << cena_produktu_sprzedaz(produkt1);
+    cena1 = cena_produktu_sprzedaz(produkt1);
+    //odswiezCeneBruttoINetto();
+}
+
+void MainWindow::on_comboBox_dostawa2_activated(const QString &arg1)
+{
+    ui->lineEdit_dostawa_cena2->setEnabled(1);
+    QString wybrany_produkt;
+    wybrany_produkt=arg1;
+    qDebug() << wybrany_produkt;
+    produkt2=wybrany_produkt.remove(wybrany_produkt.indexOf(" "), wybrany_produkt.length());
+    qDebug() << produkt2;
+    qDebug() << cena_produktu_sprzedaz(produkt2);
+    cena2 = cena_produktu_sprzedaz(produkt2);
+    //odswiezCeneBruttoINetto();
+}
+
+
+void MainWindow::on_comboBox_dostawa3_activated(const QString &arg1)
+{
+    ui->lineEdit_dostawa_cena3->setEnabled(1);
+    QString wybrany_produkt;
+    wybrany_produkt=arg1;
+    qDebug() << wybrany_produkt;
+    produkt3=wybrany_produkt.remove(wybrany_produkt.indexOf(" "), wybrany_produkt.length());
+    qDebug() << produkt3;
+    qDebug() << cena_produktu_sprzedaz(produkt3);
+    cena3 = cena_produktu_sprzedaz(produkt3);
+    //odswiezCeneBruttoINetto();
+}
+
+
+
+void MainWindow::on_lineEdit_dostawa_cena1_textChanged(const QString &arg1)
+{
+    sumaN1=cena1*arg1.toDouble();
+    ui->label_dostawa_sumN1->setText(QString::number(sumaN1));
+    ui->label_dostawa_sumB1->setText(QString::number(sumaN1*VAT));
+    odswiezCeneBruttoINetto();
+}
+
+void MainWindow::on_comboBox_dostawa_kontrahent_activated(const QString &arg1)
+{
+    QString wybrany_kontrahent;
+    wybrany_kontrahent=arg1;
+    qDebug() << wybrany_kontrahent;
+    id_kontrahenta=wybrany_kontrahent.remove(wybrany_kontrahent.indexOf(" "), wybrany_kontrahent.length());
+    qDebug() << id_kontrahenta;
+    odswiezCeneBruttoINetto();
+}
+
+void MainWindow::on_tabWidget_tabBarClicked(int index)
+{
+    if(index == 2 || index ==5) {
+        qDebug()<<index;
+        razemN=0;
+        sumaN1=0;
+        sumaN2=0;
+        sumaN3=0;
+        razemB=0;
+        razemN=0;
+//        int counterSprzedaz = 0,  ilosc1=0, ilosc2=0, ilosc3=0, pk_check=0;
+//        int counterDostawa;
+//        QString produkt1, produkt2, produkt3,  id_kontrahenta;
+//        QString data_sprzedazy, ilosc_pozycji, kategoria;
+//        double cena1=0, cena2=0, cena3=0, sumaN1=0, sumaN2=0, sumaN3=0, sumaB1=0, sumaB2=0, sumaB3=0, razemN=0, razemB=0;
+
+        odswiezCeneBruttoINetto();
+    }
+
+}
+
+void MainWindow::on_lineEdit_dostawa_cena2_textChanged(const QString &arg1)
+{
+    sumaN2=cena2*arg1.toDouble();
+    ui->label_dostawa_sumN1->setText(QString::number(sumaN2));
+    ui->label_dostawa_sumB1->setText(QString::number(sumaN2*VAT));
+    odswiezCeneBruttoINetto();
+}
+
+
+
+void MainWindow::on_lineEdit_dostawa_cena3_textChanged(const QString &arg1)
+{
+    sumaN3=cena3*arg1.toDouble();
+    ui->label_dostawa_sumN1->setText(QString::number(sumaN3));
+    ui->label_dostawa_sumB1->setText(QString::number(sumaN3*VAT));
+    odswiezCeneBruttoINetto();
+}
+
+void MainWindow::on_pushButton_dostawa_clicked()
+{
+    ilosc_pozycji = QString::number(counterDostawa);
+    //data_dostawy ="2021-08-12";
+
+    QString ilosc1_2;
+    ilosc1_2 = ui->lineEdit_dostawa_cena1->text();
+    QString ilosc2_2;
+    ilosc2_2 = ui->lineEdit_dostawa_cena2->text();
+    QString ilosc3_2;
+    ilosc3_2 = ui->lineEdit_dostawa_cena3->text();
+
+    if (counterDostawa == 0 || id_kontrahenta.isEmpty()){
+        ui->label_dostawa_komunikat_4->setText("Wybierz co najmniej jedn produkt i kontrahenta, aby przyjąć towar");
+    }
+
+    if(counterDostawa == 1 && !id_kontrahenta.isEmpty() && !ilosc1_2.isEmpty() && !produkt1.isEmpty() && ilosc1_2 != "0") {
+        QSqlQuery zapytanie;
+        zapytanie.prepare("INSERT INTO dostawa(id_kontrahenta, produkt1_id, ilosc1, produkt2_id, ilosc2, produkt3_id, ilosc3, data_dostawy) VALUES (:id_kontrahenta, :produkt1, :ilosc1_2, 34, 1, 34, 1, :data_dostawy);");
+        zapytanie.bindValue(":id_kontrahenta", id_kontrahenta);
+        zapytanie.bindValue(":produkt1", produkt1);
+        zapytanie.bindValue(":ilosc1_2", ilosc1_2);
+        zapytanie.bindValue(":produkt2", produkt2);
+        zapytanie.bindValue(":ilosc2_2", ilosc2_2);
+        zapytanie.bindValue(":produkt3", produkt3);
+        zapytanie.bindValue(":ilosc3_2", ilosc3_2);
+        zapytanie.bindValue(":data_dostawy", data_dostawy);
+        bool sukces = zapytanie.exec();
+        qDebug() << sukces;
+        if (sukces) {
+            ui->label_dostawa_komunikat_4->setText("Wprowadzono 1 produkt");
+        }
+    }
+     if(counterDostawa == 2 && !id_kontrahenta.isEmpty() && !ilosc1_2.isEmpty() && !produkt1.isEmpty() && !ilosc2_2.isEmpty() && !produkt2.isEmpty() && ilosc1_2 != "0" && ilosc2_2 != "0" ) {
+        QSqlQuery zapytanie;
+        zapytanie.prepare("INSERT INTO dostawa(id_kontrahenta, produkt1_id, ilosc1, produkt2_id, ilosc2, produkt3_id, ilosc3, data_dostawy) VALUES (:id_kontrahenta, :produkt1, :ilosc1_2, :produkt2, :ilosc2_2, 34, 1, :data_dostawy);");
+        zapytanie.bindValue(":id_kontrahenta", id_kontrahenta);
+        zapytanie.bindValue(":produkt1", produkt1);
+        zapytanie.bindValue(":ilosc1_2", ilosc1_2);
+        zapytanie.bindValue(":produkt2", produkt2);
+        zapytanie.bindValue(":ilosc2_2", ilosc2_2);
+        zapytanie.bindValue(":produkt3", produkt3);
+        zapytanie.bindValue(":ilosc3_2", ilosc3_2);
+        zapytanie.bindValue(":data_dostawy", data_dostawy);
+        bool sukces = zapytanie.exec();
+        qDebug() << sukces;
+        if (sukces) {
+            ui->label_dostawa_komunikat_4->setText("Wprowadzono 2 produkty");
+        }
+    }
+
+     if(counterDostawa == 3 && !id_kontrahenta.isEmpty() && !ilosc1_2.isEmpty() && !produkt1.isEmpty() && !ilosc2_2.isEmpty() && !produkt2.isEmpty() && !ilosc3_2.isEmpty() && !produkt3.isEmpty() && ilosc1_2 != "0" && ilosc2_2 != "0" && ilosc3_2 != "0") {
+        QSqlQuery zapytanie;
+        zapytanie.prepare("INSERT INTO dostawa(id_kontrahenta, produkt1_id, ilosc1, produkt2_id, ilosc2, produkt3_id, ilosc3, data_dostawy) VALUES (:id_kontrahenta, :produkt1, :ilosc1_2, :produkt2, :ilosc2_2, :produkt3, :ilosc3_2, :data_dostawy);");
+        zapytanie.bindValue(":id_kontrahenta", id_kontrahenta);
+        zapytanie.bindValue(":produkt1", produkt1);
+        zapytanie.bindValue(":ilosc1_2", ilosc1_2);
+        zapytanie.bindValue(":produkt2", produkt2);
+        zapytanie.bindValue(":ilosc2_2", ilosc2_2);
+        zapytanie.bindValue(":produkt3", produkt3);
+        zapytanie.bindValue(":ilosc3_2", ilosc3_2);
+        zapytanie.bindValue(":data_dostawy", data_dostawy);
+        bool sukces = zapytanie.exec();
+        qDebug() << sukces;
+        if (sukces) {
+            ui->label_dostawa_komunikat_4->setText("Wprowadzono 3 produkty");
+        }
+    }
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    on_lineEdit_dostawa_wyszukajtowar_textChanged("");
+    ui->lineEdit_dostawa_wyszukajtowar->setText("");
+    ui->lineEdit_dostawa_wyszukajtowar_kontrahent->setText("");
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    on_lineEdit_sprzedaz_wyszukajtowar_textChanged("");
+    ui->lineEdit_sprzedaz_wyszukajtowar->setText("");
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    on_lineEdit_kontrahenci_textChanged("");
+    ui->lineEdit_kontrahenci->setText("");
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    on_lineEdit_magazyn_wyszukajtowar_textChanged("");
+    ui->lineEdit_magazyn_wyszukajtowar->setText("");
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    on_lineEdit_faktury_wyszukaj_textChanged("");
+    ui->lineEdit_faktury_wyszukaj->setText("");
+}
+
+void MainWindow::on_pushButton_7_clicked()
+{
+    on_lineEdit_produkt_textChanged("");
+    ui->lineEdit_produkt->setText("");
+}
+
+void MainWindow::on_pushButton_8_clicked()
+{
+    on_lineEdit_kategorie_textChanged("");
+    ui->lineEdit_kategorie->setText("");
+}
